@@ -1,0 +1,371 @@
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def read_file(file_name):
+    """
+    This function reads the file.
+    :param file_name: It provides path to the data.
+    :return: It returns a list of dicts containing all information in the table.
+    """
+    lines = []
+    with open(file_name, 'r') as csv_file:
+        spreadsheet = csv.DictReader(csv_file)
+        for row in spreadsheet:
+            lines.append(row)
+    return lines
+
+
+def fetch_year(year_data):
+    """
+    This function makes a list of year
+    :param month_data: This is a list of dicts with year.
+    :return: It returns the yearly months in a list.
+    """
+    year_list = []
+    for row in year_data:
+        year = row['Year']
+        year_list.append(year)
+
+    return year_list
+
+
+def fetch_form_of_ceremony(ceremony_data):
+    """
+    This function makes a list of form of ceremonies
+    :param month_data: This is a list of dicts with form of ceremonies.
+    :return: It returns the form of ceremonies in a list.
+    """
+    ceremony_list = []
+    for row in ceremony_data:
+        ceremony = row['Form of Ceremony']
+        ceremony_list.append(ceremony)
+
+    return ceremony_list
+def fetch_no_of_marriages(marriages_data):
+    """
+    This function makes a list of number of passengers
+    :param month_data: This is a list of dicts with number of passengers.
+    :return: It returns the number of passengers in a list.
+    """
+    marriages_list = []
+    for row in marriages_data:
+        marriages = int(row['VALUE'])
+        marriages_list.append(marriages)
+
+    return marriages_list
+
+
+def main():
+    spreadsheet = read_file('VSB10.20230623T090617.csv')
+
+    #print(spreadsheet) #Printing full data set
+    #print(len(spreadsheet))
+
+
+    year_data = fetch_year(spreadsheet)
+    #print(year_data) #Checking if year got appended correctly
+
+
+    ceremony_data = fetch_form_of_ceremony(spreadsheet)
+    #print(ceremony_data) #Checking if week got appended correctly
+
+    #QUERY 1: WHAT IS THE NUMBER OF MARRIAGES THAT WERE REGISTERED EVERY YEAR?
+    marriage_data = fetch_no_of_marriages(spreadsheet)
+
+    year_2016=0
+    year_2017=0
+    year_2018=0
+    year_2019=0
+    year_2020=0
+    year_2021=0
+    year_2022=0
+    for i in range(len(spreadsheet)):
+        if year_data[i]=='2016':
+            year_2016=year_2016+marriage_data[i]
+        elif year_data[i]=='2017':
+            year_2017=year_2017+marriage_data[i]
+        elif year_data[i]=='2018':
+            year_2018=year_2018+marriage_data[i]
+        elif year_data[i]=='2019':
+            year_2019=year_2019+marriage_data[i]
+        elif year_data[i]=='2020':
+            year_2020=year_2020+marriage_data[i]
+        elif year_data[i]=='2021':
+            year_2021=year_2021+marriage_data[i]
+        elif year_data[i]=='2022':
+            year_2022=year_2022+marriage_data[i]
+
+
+    # Draw a bar chart for total weddings per year
+    def addlabels(x, y):
+        for i in range(len(x)):
+            plt.text(i, y[i], y[i], ha='center')
+
+    n = 7
+    r = np.arange(n)
+    width = 0.40
+    x_lables_yearly = ['2016','2017','2018','2019','2020','2021','2022']
+    y_labels_yearly = [year_2016,year_2017,year_2018,year_2019,year_2020,year_2021,year_2022]
+    plt.bar(r, y_labels_yearly, color='b', width=width, edgecolor='black')
+
+    plt.xlabel("YEARS",fontsize=12)
+    plt.ylabel("NUMBER OF REGISTERED MARRIAGES",fontsize=12)
+    plt.title("CHART 1: TOTAL NUMBER OF SAME SEX MARRIAGES \nREGISTERED IN IRELAND FROM 2016-2022",fontsize=14)
+
+    plt.grid(linestyle='--')
+    plt.xticks(r + width / 2, x_lables_yearly, fontsize=10)
+    addlabels(x_lables_yearly,y_labels_yearly)
+
+    plt.show()
+
+
+    #QUERY 2: WHAT KIND OF MARRIAGE REGISTRATIONS WERE THEY?
+
+    other_religious_deno_2016 = 0
+    other_religious_deno_2017 = 0
+    other_religious_deno_2018 = 0
+    other_religious_deno_2019 = 0
+    other_religious_deno_2020 = 0
+    other_religious_deno_2021 = 0
+    other_religious_deno_2022 = 0
+
+    civil_marriages_2016 = 0
+    civil_marriages_2017 = 0
+    civil_marriages_2018 = 0
+    civil_marriages_2019 = 0
+    civil_marriages_2020 = 0
+    civil_marriages_2021 = 0
+    civil_marriages_2022 = 0
+
+    humanist_2016 = 0
+    humanist_2017 = 0
+    humanist_2018 = 0
+    humanist_2019 = 0
+    humanist_2020 = 0
+    humanist_2021 = 0
+    humanist_2022 = 0
+    humanist_2023 = 0
+
+    spiritualist_2016 = 0
+    spiritualist_2017 = 0
+    spiritualist_2018 = 0
+    spiritualist_2019 = 0
+    spiritualist_2020 = 0
+    spiritualist_2021 = 0
+    spiritualist_2022 = 0
+
+    all_ceremonies_2016 = 0
+    all_ceremonies_2017 = 0
+    all_ceremonies_2018 = 0
+    all_ceremonies_2019 = 0
+    all_ceremonies_2020 = 0
+    all_ceremonies_2021 = 0
+    all_ceremonies_2022 = 0
+
+    for i in range(len(spreadsheet)):
+        if ceremony_data[i] == 'Other religious denominations':
+            if year_data[i] == '2016':
+                other_religious_deno_2016 = other_religious_deno_2016 + marriage_data[i]
+            elif year_data[i] == '2017':
+                other_religious_deno_2017 = other_religious_deno_2017 + marriage_data[i]
+            elif year_data[i] == '2018':
+                other_religious_deno_2018 = other_religious_deno_2018 + marriage_data[i]
+            elif year_data[i] == '2019':
+                other_religious_deno_2019 = other_religious_deno_2019 + marriage_data[i]
+            elif year_data[i] == '2020':
+                other_religious_deno_2020 = other_religious_deno_2020 + marriage_data[i]
+            elif year_data[i] == '2021':
+                other_religious_deno_2021 = other_religious_deno_2021 + marriage_data[i]
+            elif year_data[i] == '2022':
+                other_religious_deno_2022 = other_religious_deno_2022 + marriage_data[i]
+
+        elif ceremony_data[i] == 'Civil marriages':
+            if year_data[i] == '2016':
+                civil_marriages_2016 = civil_marriages_2016+marriage_data[i]
+            elif year_data[i] == '2017':
+                civil_marriages_2017 = civil_marriages_2017 + marriage_data[i]
+            elif year_data[i] == '2018':
+                civil_marriages_2018 = civil_marriages_2018+marriage_data[i]
+            elif year_data[i] == '2019':
+                civil_marriages_2019 = civil_marriages_2019+marriage_data[i]
+            elif year_data[i] == '2020':
+                civil_marriages_2020 = civil_marriages_2020+marriage_data[i]
+            elif year_data[i] == '2021':
+                civil_marriages_2021 = civil_marriages_2021+marriage_data[i]
+            elif year_data[i] == '2022':
+                civil_marriages_2022 = civil_marriages_2022+marriage_data[i]
+
+        elif ceremony_data[i] == 'The Humanist Association':
+            if year_data[i] == '2016':
+                humanist_2016 = humanist_2016+marriage_data[i]
+            elif year_data[i] == '2017':
+                humanist_2017 = humanist_2017+marriage_data[i]
+            elif year_data[i] == '2018':
+                humanist_2018 = humanist_2018 + marriage_data[i]
+            elif year_data[i] == '2019':
+                humanist_2019 = humanist_2019 + marriage_data[i]
+            elif year_data[i] == '2020':
+                humanist_2020 = humanist_2020 + marriage_data[i]
+            elif year_data[i] == '2021':
+                humanist_2021 = humanist_2021 + marriage_data[i]
+            elif year_data[i] == '2022':
+                humanist_2022 = humanist_2022 + marriage_data[i]
+
+
+        elif ceremony_data[i] == 'The Spiritualist Union of Ireland':
+            if year_data[i] == '2016':
+                spiritualist_2016 = spiritualist_2016+marriage_data[i]
+            elif year_data[i] == '2017':
+                spiritualist_2017 = spiritualist_2017+marriage_data[i]
+            elif year_data[i] == '2018':
+                spiritualist_2018 = spiritualist_2018 + marriage_data[i]
+            elif year_data[i] == '2019':
+                spiritualist_2019 = spiritualist_2019 + marriage_data[i]
+            elif year_data[i] == '2020':
+                spiritualist_2020 = spiritualist_2020 + marriage_data[i]
+            elif year_data[i] == '2021':
+                spiritualist_2021 = spiritualist_2021 + marriage_data[i]
+            elif year_data[i] == '2022':
+                spiritualist_2022 = spiritualist_2022 + marriage_data[i]
+
+
+        elif ceremony_data[i] == 'All ceremonies':
+            if year_data[i] == '2016':
+                all_ceremonies_2016 = all_ceremonies_2016+marriage_data[i]
+            elif year_data[i] == '2017':
+                all_ceremonies_2017 = all_ceremonies_2017+marriage_data[i]
+            elif year_data[i] == '2018':
+                all_ceremonies_2018 = all_ceremonies_2018+marriage_data[i]
+            elif year_data[i] == '2019':
+                all_ceremonies_2019 = all_ceremonies_2019+marriage_data[i]
+            elif year_data[i] == '2020':
+                all_ceremonies_2020 = all_ceremonies_2020+marriage_data[i]
+            elif year_data[i] == '2021':
+                all_ceremonies_2021 = all_ceremonies_2021+marriage_data[i]
+            elif year_data[i] == '2022':
+                all_ceremonies_2022 = all_ceremonies_2022+marriage_data[i]
+
+    #TABLE
+    print("TYPE OF CEREMONY \t\t\t\t\t 2016\t\t2017\t\t2018\t\t2019\t\t2020\t\t2021\t\t2022")
+
+    print(f"Civil Ceremonies\t\t\t\t\t{civil_marriages_2016:,}\t\t{civil_marriages_2017:,}\t\t"
+          f"{civil_marriages_2018:,}\t\t{civil_marriages_2019:,}\t\t"
+          f"{civil_marriages_2020:,}\t\t\t{civil_marriages_2021:,}\t\t\t{civil_marriages_2022:,}")
+    print(f"Humanist Associaton\t\t\t\t\t{humanist_2016:,}\t\t\t{humanist_2017:,}\t\t\t"
+          f"{humanist_2018:,}\t\t\t{humanist_2019:,}\t\t\t"
+          f"{humanist_2020:,}\t\t\t{humanist_2021:,}\t\t\t{humanist_2022:,}")
+    print(f"Spiritualist Associaton\t\t\t\t{spiritualist_2016:,}\t\t\t{spiritualist_2017:,}\t\t\t"
+          f"{spiritualist_2018:,}\t\t\t{spiritualist_2019:,}\t\t\t"
+          f"{spiritualist_2020:,}\t\t\t{spiritualist_2021:,}\t\t\t{spiritualist_2022:,}")
+    print(f"Other Religious Denominations\t\t{other_religious_deno_2016:,}\t\t\t{other_religious_deno_2017:,}\t\t\t"
+          f"{other_religious_deno_2018:,}\t\t\t{other_religious_deno_2019:,}\t\t\t"
+          f"{other_religious_deno_2020:,}\t\t\t{other_religious_deno_2021:,}\t\t\t{other_religious_deno_2022:,}")
+
+
+    #PIE CHART: DATA FOR 2016
+
+    x_lables_weddings_2016 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations']
+    y_labels_weddings_2016 = [civil_marriages_2016, humanist_2016, spiritualist_2016, other_religious_deno_2016]
+    plt.pie(y_labels_weddings_2016,
+            labels=x_lables_weddings_2016, autopct='%1.1f%%')
+    plt.title("CHART 2:NUMBER OF MARRIAGES REGISTERED IN 2016", fontsize = 14)
+
+    plt.legend()
+    plt.show()
+
+    # PIE CHART: DATA FOR 2017
+
+    x_lables_weddings_2017 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations', ]
+    y_labels_weddings_2017 = [civil_marriages_2017, humanist_2017, spiritualist_2017, other_religious_deno_2017]
+    plt.pie(y_labels_weddings_2017,
+            labels=x_lables_weddings_2017, autopct='%1.1f%%')
+    plt.title("CHART 3:NUMBER OF MARRIAGES REGISTERED IN 2017", fontsize = 14)
+
+    plt.legend()
+    plt.show()
+
+    # PIE CHART: DATA FOR 2018
+
+    x_lables_weddings_2018 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations', ]
+    y_labels_weddings_2018 = [civil_marriages_2018, humanist_2018, spiritualist_2018, other_religious_deno_2018]
+    plt.pie(y_labels_weddings_2018,
+            labels=x_lables_weddings_2018, autopct='%1.1f%%')
+    plt.title("CHART 4:NUMBER OF MARRIAGES REGISTERED IN 2018", fontsize = 14)
+
+    plt.legend()
+    plt.show()
+
+    # PIE CHART: DATA FOR 2019
+
+    x_lables_weddings_2019 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations', ]
+    y_labels_weddings_2019 = [civil_marriages_2019, humanist_2019, spiritualist_2019, other_religious_deno_2019]
+    plt.pie(y_labels_weddings_2019,
+            labels=x_lables_weddings_2019, autopct='%1.1f%%')
+    plt.title("CHART 5:NUMBER OF MARRIAGES REGISTERED IN 2019", fontsize=14)
+
+    plt.legend()
+    plt.show()
+
+    # PIE CHART: DATA FOR 2020
+
+    x_lables_weddings_2020 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations', ]
+    y_labels_weddings_2020 = [civil_marriages_2020, humanist_2020, spiritualist_2020, other_religious_deno_2020]
+    plt.pie(y_labels_weddings_2020,
+            labels=x_lables_weddings_2020, autopct='%1.1f%%')
+    plt.title("CHART 6:NUMBER OF MARRIAGES REGISTERED IN 2020", fontsize=14)
+
+    plt.legend()
+    plt.show()
+
+    # PIE CHART: DATA FOR 2021
+
+    x_lables_weddings_2021 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations', ]
+    y_labels_weddings_2021 = [civil_marriages_2021, humanist_2021, spiritualist_2021, other_religious_deno_2021]
+    plt.pie(y_labels_weddings_2021,
+            labels=x_lables_weddings_2021, autopct='%1.1f%%')
+    plt.title("CHART 7:NUMBER OF MARRIAGES REGISTERED IN 2021", fontsize=14)
+
+    plt.legend()
+    plt.show()
+
+    # PIE CHART: DATA FOR 2022
+
+    x_lables_weddings_2022 = ['Civil Ceremonies', 'Humanist', 'Spiritualist', 'Other\nReligious\nDenominations', ]
+    y_labels_weddings_2022 = [civil_marriages_2022, humanist_2022, spiritualist_2022, other_religious_deno_2022]
+    plt.pie(y_labels_weddings_2022,
+            labels=x_lables_weddings_2022, autopct='%1.1f%%')
+    plt.title("CHART 8:NUMBER OF MARRIAGES REGISTERED IN 2022", fontsize=14)
+
+    plt.legend()
+    plt.show()
+
+    #LINE GRAPH
+
+
+    civil_ceremony_full_set = [civil_marriages_2016,civil_marriages_2017,civil_marriages_2018,
+                               civil_marriages_2019,civil_marriages_2020,civil_marriages_2021,civil_marriages_2022]
+    humanist_full_set = [humanist_2016,humanist_2017,humanist_2018,humanist_2019,
+                         humanist_2020,humanist_2021,humanist_2022]
+    spiritualist_full_set = [spiritualist_2016,spiritualist_2017,spiritualist_2018,
+                             spiritualist_2019,spiritualist_2020,spiritualist_2021,spiritualist_2022]
+    other_religious_deno_full_set = [other_religious_deno_2016,other_religious_deno_2017,other_religious_deno_2018,
+                                     other_religious_deno_2019,other_religious_deno_2020,
+                                     other_religious_deno_2021,other_religious_deno_2022]
+
+    #plt.plot(x_lables_yearly, all_ceremony_full_set, label='ALL CEREMONIES')
+    plt.plot(x_lables_yearly, civil_ceremony_full_set, label='CIVIL CEREMONY')
+    plt.plot(x_lables_yearly,humanist_full_set, label='HUMANIST ASSOCIATION')
+    plt.plot(x_lables_yearly, spiritualist_full_set, label='SPIRITUALIST ASSOCIATION')
+    plt.plot(x_lables_yearly, other_religious_deno_full_set, label='OTHER RELIGIOUS DENOMINATIONS')
+
+
+    plt.grid(linestyle='-')
+    plt.xlabel("YEAR")
+    plt.ylabel("CHANGES IN TREND IN REGISTRATION OF MARRIAGES")
+    plt.title('CHART 9: SAME SEX MARRIAGE REGISTRATION IN \nIRELAND:2016-2022', fontsize = 14)
+    plt.xticks(r + width / 2, x_lables_yearly, fontsize=8)
+    plt.legend()
+    plt.show()
+main()
